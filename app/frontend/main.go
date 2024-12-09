@@ -4,6 +4,7 @@ package main
 
 import (
 	"context"
+	"os"
 	"time"
 
 	"gomall/app/frontend/biz/router"
@@ -20,11 +21,15 @@ import (
 	"github.com/hertz-contrib/logger/accesslog"
 	hertzlogrus "github.com/hertz-contrib/logger/logrus"
 	"github.com/hertz-contrib/pprof"
+	"github.com/hertz-contrib/sessions"
+	"github.com/hertz-contrib/sessions/redis"
+	"github.com/joho/godotenv"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func main() {
+	_ = godotenv.Load()
 	// init dal
 	// dal.Init()
 	address := conf.GetConf().Hertz.Address
@@ -33,10 +38,13 @@ func main() {
 	registerMiddleware(h)
 
 	// add a ping route to test
-	h.GET("/ping", func(c context.Context, ctx *app.RequestContext) {
-		ctx.JSON(consts.StatusOK, utils.H{"ping": "pong"})
+	h.GET("/sign-in", func(c context.Context, ctx *app.RequestContext) {
+		ctx.HTML(consts.StatusOK, "sign-in", utils.H{"Title": "Sign In"})
 	})
-
+	//定义访问路径，渲染页面
+	h.GET("/sign-up", func(c context.Context, ctx *app.RequestContext) {
+		ctx.HTML(consts.StatusOK, "sign-up", utils.H{"Title": "Sign Up"})
+	})
 	router.GeneratedRegister(h)
 
 	h.LoadHTMLGlob("template/*")
@@ -45,6 +53,9 @@ func main() {
 }
 
 func registerMiddleware(h *server.Hertz) {
+	store, _ := redis.NewStore(10, "tcp", conf.GetConf().Redis.Address, "123456", []byte(os.Getenv("SESSION_SECRET")))
+	h.Use(sessions.New("sysu-mall", store))
+
 	// log
 	logger := hertzlogrus.NewLogger()
 	hlog.SetLogger(logger)
