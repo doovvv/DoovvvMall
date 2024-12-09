@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/hertz-contrib/sessions"
 )
 
 // SendErrResponse  pack error response
@@ -19,6 +20,8 @@ func SendSuccessResponse(ctx context.Context, c *app.RequestContext, code int, d
 }
 
 func WrapResponse(ctx context.Context, c *app.RequestContext, content map[string]any) map[string]any {
-	content["user_id"] = 222
+	sessions := sessions.Default(c)
+	user_id := sessions.Get("user_id")
+	content["user_id"] = user_id
 	return content
 }
