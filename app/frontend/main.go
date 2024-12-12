@@ -9,6 +9,7 @@ import (
 
 	"gomall/app/frontend/biz/router"
 	"gomall/app/frontend/conf"
+	"gomall/app/frontend/middleware"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/middlewares/server/recovery"
@@ -37,13 +38,20 @@ func main() {
 
 	registerMiddleware(h)
 
-	// add a ping route to test
+	// 登录页面渲染
 	h.GET("/sign-in", func(c context.Context, ctx *app.RequestContext) {
-		ctx.HTML(consts.StatusOK, "sign-in", utils.H{"Title": "Sign In"})
+		data := utils.H{
+			"Title": "Sign In",
+			"Next":  ctx.Query("next"), //用于登陆后返回
+		}
+		ctx.HTML(consts.StatusOK, "sign-in", data)
 	})
-	//定义访问路径，渲染页面
+	//定义访问路径，并渲染页面
 	h.GET("/sign-up", func(c context.Context, ctx *app.RequestContext) {
 		ctx.HTML(consts.StatusOK, "sign-up", utils.H{"Title": "Sign Up"})
+	})
+	h.GET("/about", middleware.Auth(), func(c context.Context, ctx *app.RequestContext) {
+		ctx.HTML(consts.StatusOK, "about", utils.H{"Title": "about"})
 	})
 	router.GeneratedRegister(h)
 
@@ -94,4 +102,6 @@ func registerMiddleware(h *server.Hertz) {
 
 	// cores
 	h.Use(cors.Default())
+
+	middleware.Register(h)
 }
