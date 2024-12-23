@@ -4,6 +4,7 @@ package main
 
 import (
 	"context"
+	"gomall/app/frontend/infra/rpc"
 	"os"
 	"time"
 
@@ -33,6 +34,7 @@ func main() {
 	_ = godotenv.Load()
 	// init dal
 	// dal.Init()
+	rpc.Init()
 	address := conf.GetConf().Hertz.Address
 	h := server.New(server.WithHostPorts(address))
 

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package frontend.category;
+option go_package = "/frontend/category";
+import "api.proto";
+import "frontend/common.proto";
+
+
+service CategoryService{
+    rpc Category(CategoryReq) returns (common.Empty){
+        option (api.get) = "/category/:category";
+    }
+}
+message CategoryReq{
+    string category = 1 [(api.path) = "category"];
+}

@@ -1,5 +1,14 @@
-{{define "about"}}
-{{template "header" .}}
-about
-{{template "footer" .}}
-{{end}}
+{{ define "about" }}
+    {{ template "header" . }}
+    <div class="row">
+        <div class="card border-0" style="width: 100%;">
+            <div class="card-body row">
+                <div class="col-lg-5 col-sm-12 flex-column align-self-end">
+                  <img src="/static/image/中山大学.svg" class="col-lg-4 col-sm-12" alt="...">
+                    <p>数据库系统大作业：中大世纪华诞文创商城 by 22336290</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ template "footer" . }}
+{{ end }}
