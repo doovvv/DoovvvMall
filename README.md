@@ -4,5 +4,7 @@ Project for the course "Database System" at the University of Sun-yat-Sen Univer
 architecture: Micro-service  
 frontend: golang/html/template+css:bootstrap  
 backend: golang/hertz  
-## demo display
+## Demo display
 ![home](course/image.png)
+## Reference
+[教程](https://www.bilibili.com/video/BV1bf421o7NM?vd_source=1b27bec8aa00a8aea9a09874d684b2dc)
